@@ -13,6 +13,7 @@
             height: 100vh;
             background: linear-gradient(to right, #ff9a9e, #fad0c4);
             font-family: 'Pacifico', cursive;
+            position: relative;
         }
         canvas {
             display: none;
@@ -46,52 +47,90 @@
         function drawHeart() {
             let canvas = document.getElementById("heartCanvas");
             let ctx = canvas.getContext("2d");
-            let img = new Image();
-            img.src = "img.jpg";
             
-            img.onload = function() {
-                canvas.style.display = "block";
+            canvas.style.display = "block";
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#e60026";
+            
+            let t = 0;
+            function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = "#e60026";
-                
-                let t = 0;
-                function animate() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.beginPath();
-                    let heartPath = [];
-                    for (let i = 0; i <= t * Math.PI; i += 0.05) {
-                        let x = 200 + 100 * Math.sin(i) ** 3;
-                        let y = 180 - (50 * Math.cos(i) - 20 * Math.cos(2 * i) - 10 * Math.cos(3 * i) - 5 * Math.cos(4 * i));
-                        heartPath.push({x, y});
-                        if (i === 0) {
-                            ctx.moveTo(x, y);
-                        } else {
-                            ctx.lineTo(x, y);
-                        }
-                    }
-                    ctx.closePath();
-                    ctx.fill();
-                    ctx.strokeStyle = "#b3001b";
-                    ctx.lineWidth = 3;
-                    ctx.stroke();
-                    
-                    ctx.save();
-                    ctx.clip();
-                    ctx.drawImage(img, 100, 100, 200, 200);
-                    ctx.restore();
-                    
-                    ctx.font = "30px Pacifico";
-                    ctx.fillStyle = "white";
-                    ctx.textAlign = "center";
-                    ctx.fillText("For you habibi <3", 200, 60);
-                    
-                    if (t < 2) {
-                        t += 0.02;
-                        requestAnimationFrame(animate);
+                ctx.beginPath();
+                let heartPath = [];
+                for (let i = 0; i <= t * Math.PI; i += 0.05) {
+                    let x = 200 + 100 * Math.sin(i) ** 3;
+                    let y = 180 - (50 * Math.cos(i) - 20 * Math.cos(2 * i) - 10 * Math.cos(3 * i) - 5 * Math.cos(4 * i));
+                    heartPath.push({x, y});
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
                     }
                 }
-                animate();
-            };
+                ctx.closePath();
+                ctx.fill();
+                ctx.strokeStyle = "#b3001b";
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                ctx.font = "30px Pacifico";
+                ctx.fillStyle = "white";
+                ctx.textAlign = "center";
+                ctx.fillText("For you habibi <3", 200, 60);
+                
+                drawFlowersAndStars();
+                
+                if (t < 2) {
+                    t += 0.02;
+                    requestAnimationFrame(animate);
+                }
+            }
+            animate();
+        }
+        
+        function drawFlowersAndStars() {
+            let canvas = document.getElementById("heartCanvas");
+            let ctx = canvas.getContext("2d");
+            
+            for (let i = 0; i < 6; i++) {
+                let x = Math.random() * 400;
+                let y = Math.random() * 400;
+                drawFlower(ctx, x, y);
+            }
+            for (let i = 0; i < 10; i++) {
+                let x = Math.random() * 400;
+                let y = Math.random() * 400;
+                drawStar(ctx, x, y);
+            }
+        }
+        
+        function drawFlower(ctx, x, y) {
+            ctx.fillStyle = "#ffcc00";
+            for (let i = 0; i < 6; i++) {
+                let angle = (Math.PI / 3) * i;
+                let petalX = x + 10 * Math.cos(angle);
+                let petalY = y + 10 * Math.sin(angle);
+                ctx.beginPath();
+                ctx.arc(petalX, petalY, 5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.beginPath();
+            ctx.arc(x, y, 6, 0, Math.PI * 2);
+            ctx.fillStyle = "#ff6699";
+            ctx.fill();
+        }
+        
+        function drawStar(ctx, x, y) {
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+                let angle = (Math.PI / 2.5) * i;
+                let starX = x + 6 * Math.cos(angle);
+                let starY = y + 6 * Math.sin(angle);
+                ctx.lineTo(starX, starY);
+            }
+            ctx.closePath();
+            ctx.fill();
         }
     </script>
 </body>
