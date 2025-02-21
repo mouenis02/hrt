@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw a Heart</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            font-family: 'Pacifico', cursive;
+        }
+        canvas {
+            display: none;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 20px;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+    <button onclick="drawHeart()">Click here Ouissal 🎀</button>
+    <canvas id="heartCanvas" width="400" height="400"></canvas>
+    
+    <script>
+        function drawHeart() {
+            let canvas = document.getElementById("heartCanvas");
+            let ctx = canvas.getContext("2d");
+            let img = new Image();
+            img.src = "img.jpg";
+            
+            img.onload = function() {
+                canvas.style.display = "block";
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#e60026";
+                
+                let t = 0;
+                function animate() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.beginPath();
+                    let heartPath = [];
+                    for (let i = 0; i <= t * Math.PI; i += 0.05) {
+                        let x = 200 + 100 * Math.sin(i) ** 3;
+                        let y = 180 - (50 * Math.cos(i) - 20 * Math.cos(2 * i) - 10 * Math.cos(3 * i) - 5 * Math.cos(4 * i));
+                        heartPath.push({x, y});
+                        if (i === 0) {
+                            ctx.moveTo(x, y);
+                        } else {
+                            ctx.lineTo(x, y);
+                        }
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.strokeStyle = "#b3001b";
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                    
+                    ctx.save();
+                    ctx.clip();
+                    ctx.drawImage(img, 100, 100, 200, 200);
+                    ctx.restore();
+                    
+                    ctx.font = "30px Pacifico";
+                    ctx.fillStyle = "white";
+                    ctx.textAlign = "center";
+                    ctx.fillText("For you habibi <3", 200, 60);
+                    
+                    if (t < 2) {
+                        t += 0.02;
+                        requestAnimationFrame(animate);
+                    }
+                }
+                animate();
+            };
+        }
+    </script>
+</body>
+</html>
